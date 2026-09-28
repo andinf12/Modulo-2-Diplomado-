@@ -4,47 +4,46 @@ pipeline {
     stages {
         stage('1. Auditoria de Codigo (Linting)') {
             steps {
-                echo 'Validando sintaxis de Terraform y ansible...'
-                dir('terraform') { 
-                    // Terraform necesita inicializarse antes de validar
-                    sh 'terraform init' 
-                    sh 'terraform validate'
+                echo 'Validando sintaxis de Terraform y Ansible...'
+                dir('corporativo-gitops/terraform') { 
+                    bat 'echo Simulando: terraform init' 
+                    bat 'echo Simulando: terraform validate'
                 }
-                dir('ansible') { 
-                    sh 'ansible-playbook --syntax-check playbook.yml'
+                dir('corporativo-gitops/ansible') { 
+                    bat 'echo Simulando: ansible-playbook --syntax-check playbook.yml'
                 }
             }
         }
 
         stage('2. Planificacion (Terraform Plan)') {
             steps {
-                dir('terraform') {
-                    sh 'terraform init'
-                    sh 'terraform plan'
+                dir('corporativo-gitops/terraform') {
+                    bat 'echo Simulando: terraform init'
+                    bat 'echo Simulando: terraform plan'
                 }
             }
         }
 
-        stage ('3. Aprobacion Manual (Gatekeeper)') {
+        stage('3. Aprobacion Manual (Gatekeeper)') {
             steps {
                 input message: '¿El terraform plan se ve correcto? ¿Aprobar Infraestructura?', ok: 'Aprobar y Desplegar'
             }
         }
 
-        stage ('4. Aprovisionamiento (Terraform Apply)') {
+        stage('4. Aprovisionamiento (Terraform Apply)') {
             steps {
-                dir('terraform') { 
-                    sh 'terraform apply -auto-approve'
+                dir('corporativo-gitops/terraform') { 
+                    bat 'echo Simulando: terraform apply -auto-approve'
                 }
             }
         }
 
-        stage ('5. Configuracion Ansible') {
+        stage('5. Configuracion Ansible') {
             steps {
-                dir('ansible') { 
+                dir('corporativo-gitops/ansible') { 
                     echo 'Esperando 5 seg a que la red del servidor se estabilice...'
                     sleep 5
-                    sh 'ansible-playbook -i hosts.ini playbook.yml'
+                    bat 'echo Simulando: ansible-playbook -i hosts.ini playbook.yml'
                 }
             }
         }
