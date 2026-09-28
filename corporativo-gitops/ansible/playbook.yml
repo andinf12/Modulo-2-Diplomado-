@@ -1,4 +1,4 @@
-- name: Despliegue de aplicacion y reinicion Condicional
+- name: Despliegue de aplicacion y reinicio Condicional
   hosts: produccion
   tasks:
     - name: 1. Inyectar configuracion de la BD
